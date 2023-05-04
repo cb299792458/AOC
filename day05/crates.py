@@ -18,18 +18,13 @@ for move in moves:
     num, start, end = int(words[1]),words[3],words[5]
     # print(num,start,end)
 
-    # # do moves (part 1)
-    # while num:
-    #     stacks[end].append(stacks[start].pop())
-    #     num-=1
+    # do moves (part 1)
+    for _ in range(num):
+        stacks[end].append(stacks[start].pop())
 
     # do moves (part 2)
-    for i in range(num):
-        stacks[end].append(stacks[start].pop(-num+i))
-
-
-
-
+    # for i in range(num):
+    #     stacks[end].append(stacks[start].pop(-num+i))
 
 # print stacks
 for i in range(1,10):
