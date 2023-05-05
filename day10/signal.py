@@ -36,8 +36,7 @@ for line in input:
         draw()
         cycle+=1
         x+=int(line[5:])
-    print(x)
-
+    # print(x)
     
 for start in range(0,240,40):
     print(''.join(output[start:start+40]))
