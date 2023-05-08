@@ -21,47 +21,8 @@ for r in range(len(grid)):
     for c in range(len(grid[0])):
         if grid[r][c]=='S': start=(r,c)
         if grid[r][c]=='E': end=(r,c)
-# print(start,end)
-
-# res = float('inf')
-
-# def backtrack(r,c,dist,prev_seen):
-#     if (r,c) in prev_seen: return
-#     if r<0 or c<0 or r==len(grid) or c==len(grid[0]): return
-#     if (r,c)==end:
-#         res=min(dist,res)
-#         return
-        
-#     seen = prev_seen.copy() # copy
-#     seen.add((r,c))
-
-#     for d in dirs:
-#         nr,nc=r+d[0],c+d[1]
-#         if nr<0 or nc<0 or nr==len(grid) or nc==len(grid[0]): continue
-#         if heights[grid[nr][nc]] <= heights[grid[r][c]] + 1:
-#             backtrack(nr,nc,dist+1,seen)
-
-
-# backtrack(start[0],start[1],0,set())
-# print(res)
 
 memo = [[float('inf') for _ in range(len(grid[0]))] for _ in range(len(grid))]
-
-# def fill(r,c,dist):
-#     if dist>=memo[r][c]: return # already saw square with faster route
-
-#     memo[r][c]=dist
-
-#     for d in dirs:
-#         nr,nc=r+d[0],c+d[1]
-#         if nr<0 or nc<0 or nr==len(grid) or nc==len(grid[0]): continue
-#         if heights[grid[nr][nc]] <= heights[grid[r][c]] + 1:
-#             fill(nr,nc,dist+1)
-
-# fill(start[0],start[1],0)
-# for line in memo:
-#     print(line)
-
 seen = set()
 
 # # part 1
