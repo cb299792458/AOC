@@ -26,6 +26,8 @@ for line in input:
 
 # print(len(no_beacon))
 # # print(no_beacon)
+
+
 def check(x,y):
     for sx,sy,bx,by in coords:
         dist = abs(sx-bx) + abs(sy-by)
@@ -33,34 +35,25 @@ def check(x,y):
     return True
 
 to_check = defaultdict(int)
-most=0
+
 def add_point(x,y):
-    global most
-    if x<0 or y<0 or x>4000000 or y>4000000: return
-    # to_check[x,y]+=1
-    # if to_check[x,y]>most:
-    #     print(x,y)
-    #     most=to_check[x,y]
-    # most+=1
-    if check(x,y): print(x,y)
-# for sx,sy,bx,by in coords:
-#     dist = abs(sx-bx) + abs(sy-by) + 1
+    if x<0 or y<0 or x>4000000 or y>4000000: return False
+    if check(x,y):
+        print(x,y)
+        print(4000000*x+y)
+        return True
+    
+done = False
+for sx,sy,bx,by in coords:
+    dist = abs(sx-bx) + abs(sy-by) + 1
 
-#     diff=0
-#     # add all points just outside the diamond
-#     # go diagonally from each vertex
-#     while diff < dist:
-#         add_point(sx+dist-diff,sy+diff)
-#         add_point(sx-dist+diff,sy-diff)
-#         add_point(sx-diff,sy+dist-diff)
-#         add_point(sx+diff,sy-dist+diff)
-#         diff+=1
-
-# print(to_check)
-# print(len(to_check))
-
-
-
-print(most)
-
-print(2706598*4000000+3253551)
+    diff=0
+    # add all points just outside the diamond
+    # go diagonally from each vertex
+    while diff < dist and not done:
+        if add_point(sx+dist-diff,sy+diff): done=True
+        if add_point(sx-dist+diff,sy-diff): done=True
+        if add_point(sx-diff,sy+dist-diff): done=True
+        if add_point(sx+diff,sy-dist+diff): done=True
+        diff+=1
+    if done: break
