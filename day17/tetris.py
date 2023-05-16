@@ -55,25 +55,35 @@ def find_start_height():
     rock_heights=[0,2,2,3,1]
 
     start_height=max( start_height , rock_pos[0] + rock_heights[rock_idx%5] + 4)
-    if rock_idx==2021: print(start_height)
+    if rock_idx==6899+1600: print(start_height-4, '<<<<')
 
-for dir in input:
-    rock_push(dir)
-    if not rock_drop():
-        find_start_height()
-        place_rocks()
-        rock_idx+=1
 
-        while start_height>len(chamber)-1-3:
-            chamber.append(['|']+['.']*7+['|'])
-        rock_pos=(start_height,3)
+for _ in range(5):
+    for dir in input:
+        rock_push(dir)
+        if not rock_drop():
+            find_start_height()
+            place_rocks()
+            rock_idx+=1
+
+            while start_height>len(chamber)-1-3:
+                chamber.append(['|']+['.']*7+['|'])
+            rock_pos=(start_height,3)
+
+    print(start_height-4,rock_idx)
+    # print(rock_idx)
     
 
 while chamber[-1]==['|']+['.']*7+['|']: chamber.pop()
-print_chamber()
 
-    
+# Math is hard
+# while rock_idx<1000000000000:
+steps = (1000000000000 - rock_idx) // 1725
+start_height+=2630*steps
+rock_idx+=1725*steps
 
+print(start_height-4,rock_idx)
 
+print(1524637678703+12945-10503)
 
-
+print(start_height-4+2630)
