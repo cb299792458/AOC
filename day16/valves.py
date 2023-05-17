@@ -1,6 +1,6 @@
 input = open('input.txt','r').readlines()
 input = [a[:-1] for a in input]
-
+from collections import deque
 valves=dict()
 
 class Valve:
@@ -21,6 +21,10 @@ class Valve:
             self.dists.append((a.name,dijkstra_distance(self,a)))
         self.dists.sort(key=lambda x: valves[x[0]].flow / x[1], reverse=True)
 
+        self.dist_dict = dict()
+        for a in self.dists:
+            self.dist_dict[a[0]] = a[1]
+
 
 for line in input:
     words = line.split()
@@ -34,17 +38,6 @@ to_open = set()
 for v in valves.values():
     v.make_adj_list()
     if v.flow: to_open.add(v)
-
-"""
-Strategy:
-find only valves with flow rate > 0
-start at curr = AA
-find largest flow rate / distance away
-    what if there's a cluster that's far away?
-    
-memo[minute] = max release at that minute
-    different paths
-"""
 
 def dijkstra_distance(start,end):
     dist=0
@@ -60,24 +53,52 @@ def dijkstra_distance(start,end):
 for node in to_open:
     node.make_dist_list()
 valves['AA'].make_dist_list()
+# print(valves['AA'].dist_dict)
 
-minute=0
-curr = valves['AA']
-seen=set()
-pressure = 0
+class search:
+    def __init__(self,node,opened,time_left,pressure) -> None:
+        self.node = node
+        self.opened = opened
+        self.time_left = time_left
+        self.pressure = pressure
 
-while minute <= 4:
-    seen.add(curr)
 
-    for node in curr.dists:
-        if valves[node[0]] in seen: continue
+# res = 0
+# start = {'current':'AA', 'opened':set(), 'time_left':30, 'pressure':0}
+start = search(valves['AA'],set(),30,0)
+best = {30:0} # key is time_left, value is pressure
+queue = deque([start])
 
-        print(node[0])
-        minute+=node[1]
-        curr=valves[node[0]]
-        minute+=1
-        pressure += curr.flow*(4-minute)
-        break
-    if curr in seen: break
+while queue:
+    curr = queue.popleft()
 
-print(pressure)
+    # end case
+    if curr.time_left<0: 
+        # res = max(res, curr[''])
+        continue
+
+    # too slow
+    too_slow = False
+    for time_left in best.keys():
+        if curr.time_left <= time_left and best[time_left] > curr.pressure: too_slow = True
+    if too_slow: continue
+
+    # save best pressure
+    if curr.time_left not in best or best[time_left] < curr.pressure:
+        # print('hit')
+        best[curr.time_left] = curr.pressure
+
+    # explore new nodes
+    for next_node in to_open:
+        seen = curr.opened.copy()
+        if next_node in seen: continue
+        seen.add(next_node)
+
+        time_left = curr.time_left
+        time_left -= curr.node.dist_dict[next_node.name] # travel time
+        time_left -= 1 # time to open valve
+        queue.append(search(next_node, seen, time_left, curr.pressure+(time_left*next_node.flow)))
+
+    # if curr.time_left==1: print(len(seen))
+
+print(best)
