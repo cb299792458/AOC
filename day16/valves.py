@@ -101,8 +101,4 @@ while queue:
 
 # the value with the lowest key should be the best pressure, but it changes?!
 print(best)
-
-res = 0
-for val in best.values():
-    res = max(res,val)
-print(res)
+print(max(best.values()))

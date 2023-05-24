@@ -21,14 +21,8 @@ for _ in range(10):
 
         temp = nums.pop(index) # 1
 
-        # if index+num<0: index+= math.floor((index+num)/length)
-        # index = (index + num) % length 
         index+=tup[0]
 
-        # while index<=0:
-        #     index+=last_id
-        # while index>last_id:
-        #     index-=last_id
         index += last_id*((last_id-index)//last_id)
 
         nums = nums[0:index] + [temp] + nums[index:]
