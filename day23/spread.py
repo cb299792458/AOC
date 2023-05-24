@@ -57,14 +57,16 @@ for (r,c) in elf_pos:
     all_elves.append(Elf(r,c))
 
 
-
-for _ in range(10):
+i=1
+for _ in range(1000):
     proposals = defaultdict(list)
 
     # list of all elves proposing a tuple position
     for elf in all_elves:
         proposal = elf.propose()
         if proposal: proposals[proposal].append(elf)
+
+    if len(proposals)==0: print(i)
 
     # move all elves if they are the only elf proposing to move there
     for tup in proposals.keys():
@@ -76,7 +78,7 @@ for _ in range(10):
             elf_pos.add(tup)
 
     dir_order = dir_order[1:] + [dir_order[0]]
-
+    i+=1
 
 
 # print(elf_pos)
