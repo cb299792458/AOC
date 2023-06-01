@@ -27,7 +27,7 @@ for line in input:
 # print(blueprints)
 
 class Inventory:
-    def __init__(self, bp, bots=defaultdict(int), mats=defaultdict(int), time=24) -> None:
+    def __init__(self, bp, bots=defaultdict(int), mats=defaultdict(int), time=32) -> None:
         self.bp = bp
         self.bots = bots
         self.mats = mats
@@ -71,8 +71,6 @@ class Inventory:
         self.harvest()
         self.bots[bot]+=1
 
-
-
     # find max possible geodes from this state
     def possible_geodes(self):
         return self.mats[GEO] + (self.bots[GEO]*self.time) + int((self.time*(self.time-1))/2)
@@ -81,6 +79,7 @@ class Inventory:
     
 
 quality_levels = defaultdict(int)
+max_geos = defaultdict(int)
 for bp in blueprints:
     max_geodes=0
     start = Inventory(bp)
@@ -111,6 +110,11 @@ for bp in blueprints:
         # queue.append(new)
 
     quality_levels[bp] = bp * max_geodes
+    max_geos[bp] = max_geodes
 
 print(quality_levels)
 print(sum(quality_levels.values()))
+
+
+from math import prod
+print(prod(max_geos.values()))
