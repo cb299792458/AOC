@@ -10,18 +10,18 @@ input = [a[:-1] for a in input]
 #     vals1.append(int(nums[0]+nums[-1]))
 # print(sum(vals1))
 
-words = ['placeholder', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+words = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
 vals2 = []
 
 for line in input:
     nums=[]
     for i, char in enumerate(line):
         if char.isdigit():
-            nums.append(int(line[i]))
+            nums.append(int(char))
         else:
             for j, word in enumerate(words):
                 if word == line[i:i+len(word)]:
-                    nums.append(j)
+                    nums.append(j+1)
     vals2.append(10*nums[0]+nums[-1])     
 
 print(sum(vals2)) 
