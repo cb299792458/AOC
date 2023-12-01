@@ -1,28 +1,27 @@
+print( sum( [int(chars[0]+chars[-1]) for chars in [[char for char in line if char.isdigit()] for line in open('input.txt','r').readlines()]] ) )
+
 input = open('input.txt','r').readlines()
 input = [a[:-1] for a in input]
 
-vals1 = []
-for line in input:
-    nums = [c for c in line if c.isdigit()]
-    vals1.append(int(nums[0]+nums[-1]))
-print(sum(vals1))
+# # Part 1 (no one line)
+# vals1 = []
+# for line in input:
+#     nums = [c for c in line if c.isdigit()]
+#     vals1.append(int(nums[0]+nums[-1]))
+# print(sum(vals1))
 
-words = [None, 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+words = ['placeholder', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
 vals2 = []
 
 for line in input:
-    i=0
     nums=[]
-    while i<len(line):
-        if line[i].isdigit():
-            nums.append(line[i])
+    for i, char in enumerate(line):
+        if char.isdigit():
+            nums.append(int(line[i]))
         else:
-            for j in range(1,10):
-                word = words[j]
+            for j, word in enumerate(words):
                 if word == line[i:i+len(word)]:
-                    nums.append(str(j))
-        i+=1
-    vals2.append(int(nums[0]+nums[-1]))     
+                    nums.append(j)
+    vals2.append(10*nums[0]+nums[-1])     
 
 print(sum(vals2)) 
-        
