@@ -5,9 +5,7 @@ COLS = len(input[0])
 from collections import defaultdict
 
 valid = set()
-gears = []
 gear_near = {}
-gear_ratios = defaultdict(list)
 
 for r, row in enumerate(input):
     for c, char in enumerate(row):
@@ -18,20 +16,15 @@ for r, row in enumerate(input):
                     if -1<nr<ROWS and -1<nc<COLS:
                         valid.add((nr,nc))
 
-        if char=='*':
-            gears.append((r,c))
-            for dr in [-1,0,1]:
-                for dc in [-1,0,1]:
-                    nr, nc = r+dr, c+dc
-                    if -1<nr<ROWS and -1<nc<COLS:
+                    if char=='*':
                         gear_near[(nr,nc)] = (r,c)
-            
 
 parts = []
+gear_ratios = defaultdict(list)
+
 for r, row in enumerate(input):
-    c=-1
-    while c<COLS-1:
-        c+=1
+    c=0
+    while c<COLS:
         num = ''
         num_valid = False
         gear = None
@@ -46,18 +39,19 @@ for r, row in enumerate(input):
                     gear = gear_near[(r,c)]
 
                 c+=1
+                
             if num_valid:
                 parts.append(int(num))
             
             if gear:
                 gear_ratios[gear].append(int(num))
 
+        c+=1
 
 print(sum(parts))
 
 ratio_sum = 0
 for ratios in gear_ratios.values():
-    if len(ratios) != 2:
-        continue
-    ratio_sum +=ratios[0]*ratios[1]
+    if len(ratios) == 2:
+        ratio_sum += ratios[0]*ratios[1]
 print(ratio_sum)
