@@ -96,4 +96,3 @@ for key in keys:
   range_data = convert_ranges(range_data,key)
 range_data.sort()
 print(range_data)
-
