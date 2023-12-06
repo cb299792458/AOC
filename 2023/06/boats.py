@@ -13,34 +13,32 @@ for time, dist in zip(times,dists):
         if i*(time-i)>dist:
             ways+=1
     product*=ways
-# print(product)
+print(product)
 
 # part 2
 times = input[0].split()[1:]
 dists = input[1].split()[1:]
 time = int(''.join(times))
 dist = int(''.join(dists))
-print(time,dist)
 def check(n):
     return (n*(time-n))>dist
 
-import math
 def get_min():
-    l,r = 0,time
+    l,r = 0,time//2 # left bad, right good
     while l<r:
-        m = l + (r-l)//2
+        m = l + (r-l)//2 # round down
         if check(m):
-            r=m
+            r=m # if round up when m is good, inf loop
         else:
             l=m+1
-    return r
+    return r # return right
 
 def get_max():
-    l,r = 0,time
+    l,r = time//2,time # left good, right bad
     while l<r:
-        m = l + (1+r-l)//2
+        m = l + (1+r-l)//2 # round up
         if check(m):
-            l=m
+            l=m # if round down, m = l (good), inf loop
         else:
             r=m-1
     return l
