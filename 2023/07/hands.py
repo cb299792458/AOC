@@ -11,22 +11,8 @@ def rank(c):
 def sort_hand(tup):
     (hand, _) = tup
     counts = sorted(Counter(hand).values(), reverse=True)
-
-    hand_type=0
-    if counts[0]>3:
-        hand_type = counts[0]+2
-    elif counts[0]==3:
-        if counts[1]==2:
-            hand_type=5
-        else:
-            hand_type=4
-    elif counts[0]==2:
-        if counts[1]==2:
-            hand_type=3
-        else:
-            hand_type=2
-    else:
-        hand_type=1
+    counts += [0,0]
+    hand_type = counts[0] + (0.5 if counts[1]==2 else 0)
 
     return [hand_type] + [rank(c) for c in hand]
 
@@ -46,24 +32,10 @@ def sort_hand(tup):
     jokers = counts.pop('J',0)
     counts = list(counts.values())
     counts.sort(reverse=True)
-    counts = counts or [0] # handle JJJJJ
+    counts += [0,0]
     counts[0] += jokers
 
-    hand_type=0
-    if counts[0]>3:
-        hand_type = counts[0]+2
-    elif counts[0]==3:
-        if counts[1]==2:
-            hand_type=5
-        else:
-            hand_type=4
-    elif counts[0]==2:
-        if counts[1]==2:
-            hand_type=3
-        else:
-            hand_type=2
-    else:
-        hand_type=1
+    hand_type = counts[0] + (0.5 if counts[1]==2 else 0)
 
     return [hand_type] + [rank(c) for c in hand]
 
@@ -73,4 +45,3 @@ winnings = 0
 for i,(_,bid) in enumerate(data):
     winnings += (i+1)*bid
 print(winnings)
-
