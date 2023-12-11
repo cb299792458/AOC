@@ -62,17 +62,21 @@ print(len(path)//2)
 ds = [(1,0),(-1,0),(0,1),(0,-1)]
 
 def fill(aset,r,c):
-    if (r,c) in aset:
-        return
-    if (r,c) in path_set:
-        return
-    if r<0 or c<0 or r==R or c==C:
-        return
+    stack = [(r,c)]
+
+    while stack:
+        (r,c)  = stack.pop()
+        if (r,c) in aset:
+            continue
+        if (r,c) in path_set:
+            continue
+        if r<0 or c<0 or r==R or c==C:
+            continue
     
-    aset.add((r,c))
-    for d in ds:
-        nr,nc = r+d[0],c+d[1]
-        fill(aset,nr,nc)
+        aset.add((r,c))
+        for d in ds:
+            nr,nc = r+d[0],c+d[1]
+            stack.append((nr,nc))
 
 set1 = set()
 set2 = set()
@@ -83,31 +87,40 @@ for i, pos in enumerate(path[:-1]):
     c = input[pos[0]][pos[1]]
 
     if N(pos)==next_pos:
-        # fill(set1,*W(pos))
+        fill(set1,*W(pos))
         fill(set2,*E(pos))
 
-        if c == 'J':
-            fill(set2, *S(pos))        
+        if c=='J':
+            fill(set2, *S(pos))
+        if c=='L':
+            fill(set1, *S(pos))
 
     if E(pos)==next_pos:
-        # fill(set1,*N(pos))
+        fill(set1,*N(pos))
         fill(set2,*S(pos))
 
         if c=='L':
             fill(set2, *W(pos))
+        if c=='F':
+            fill(set1, *W(pos))
 
     if S(pos)==next_pos:
-        # fill(set1,*E(pos))
+        fill(set1,*E(pos))
         fill(set2,*W(pos))
 
         if c=='F':
             fill(set2, *N(pos))
+        if c=='7':
+            fill(set1, *N(pos))
 
     if W(pos)==next_pos:
-        # fill(set1,*S(pos))
+        fill(set1,*S(pos))
         fill(set2,*N(pos))
 
         if c=='7':
             fill(set2,*E(pos))
+        if c=='J':
+            fill(set1,*E(pos))
 
 print(len(set1),len(set2))
+print((R*C)-len(set1)-len(path_set))
