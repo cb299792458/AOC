@@ -1,37 +1,69 @@
 input = [l[:-1] for l in open('input.txt','r').readlines()]
+from functools import cache
 
-arrangements = 0
+"""
+record: full record from input
+curr: current record (actual)
+broken: current streak of broken springs
+groups: unfinished groups of broken springs
+"""
 
-def check(springs, damaged):
-    springs = springs.split('.')
-    springs = [s for s in springs if s!='']
-    springs = [len(s) for s in springs]
-    return springs == damaged
+@cache
+def ways(record, curr, broken, groups):
+    # print('called with', record, curr, broken, groups)
 
-def dfs(path, record, groups):
-    i = len(path)
+    # base case
+    if len(curr)==len(record):
+        if groups==() and not broken:
+            # print('got 1')
+            return 1
+        else:
+            # print('got 0')
+            return 0
 
-    if i==len(record):
-        if check(path, groups):
-            global arrangements
-            arrangements += 1
-        return
+    res = 0
+
+    #a: try adding #
+    if record[len(curr)]!='.':
+        if curr and curr[-1]=='#' and broken==0:
+            pass
+        else:
+
+            new_curr = curr + '#'
+            new_broken = broken + 1
+            if groups and new_broken==groups[0]:
+                res += ways(record, new_curr, 0, groups[1:])
+            else:
+                res += ways(record, new_curr, new_broken, groups)
+
+    #b: try adding .
+    if record[len(curr)]!='#':
+        new_curr = curr + '.'
+        new_broken = 0
+        new_groups = groups
+
+        if broken:
+            if groups and groups[0]==broken:
+                new_groups = groups[1:]
+            else:
+                # print('got', res)
+                return res
+        res += ways(record, new_curr, new_broken, new_groups)
     
-    if record[i]!='.':
-        dfs(path+'#', record, groups)
-    if record[i]!='#':
-        dfs(path+'.', record, groups)
+    # print('got', res)
+    return res
 
-
+total = 0
 for line in input:
+
     record, groups = line.split(' ')
     
+    # # part 2
     # record = '?'.join([record]*5)
     # groups = ','.join([groups]*5)
     
     groups = groups.split(',')
-    groups = [int(g) for g in groups]
+    groups = tuple([int(g) for g in groups])
 
-    dfs('', record, groups)
-
-print(arrangements)
+    total += ways(record, '', 0, groups)
+print(total)
