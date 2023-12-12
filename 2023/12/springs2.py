@@ -12,15 +12,8 @@ for line in input:
     groups = groups.split(',')
     groups = [int(g) for g in groups]
 
-    memo = dict()
-
     @cache
-    def dp(record_idx, brokens, group_idx):
-        if record_idx>len(record):
-            return 0
-        # if group_idx==len(groups):
-        #     return 0
-        
+    def dp(record_idx, brokens, group_idx):        
         if record_idx==len(record):
             if not brokens and group_idx==len(groups):
                 return 1
@@ -37,9 +30,10 @@ for line in input:
                 total += dp(record_idx+1, brokens + 1, group_idx)
         
         if record[record_idx] != '#':
-            # add .
+            # add . after #
             if group_idx<len(groups) and brokens==groups[group_idx]:
                 total += dp(record_idx+1, 0, group_idx+1)
+            # add . after .
             if brokens==0:
                 total += dp(record_idx+1, 0, group_idx)
         
