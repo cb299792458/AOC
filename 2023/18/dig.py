@@ -1,11 +1,12 @@
 input = [l[:-1] for l in open('input.txt','r').readlines()]
 U,D,L,R = 'U','D','L','R'
 dirs = {
-    'U': (-1,0),
-    'D': (1,0),
-    'L': (0,-1),
-    'R': (0,1)
+    U: (-1,0),
+    D: (1,0),
+    L: (0,-1),
+    R: (0,1)
 }
+
 # # part 1
 # r,c=0,0
 # trench = set([(0,0)])
@@ -29,10 +30,8 @@ dirs = {
 # print(len(trench))
 
 # part 2
-
 area = 0
 y=0
-bot = 0
 
 for line in input:
     (_,_,color) = line.split()
