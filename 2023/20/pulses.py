@@ -22,7 +22,10 @@ for name, (_, _, _, dests) in modules.items():
 q = deque()
 pulses = [0,0]
 
-for _ in range(1000):
+criticals = ['mp','qt','qb','ng']
+cycles = {key: [] for key in criticals}
+
+for i in range(1,50000):
     pulses[0] += 1
     q.append(('roadcaster',  0,     'button'))
     #         name, pulse, origin
@@ -31,6 +34,7 @@ for _ in range(1000):
         (name, pulse, orig) = q.popleft()
         module = modules[name]
         [mod_type, on, memory, dests] = module
+
 
         match mod_type:
             case 'b':
@@ -46,9 +50,16 @@ for _ in range(1000):
             case '&':
                 memory[orig] = pulse
                 send = 0 if all(memory.values()) else 1
+                if name in criticals and send:
+                    cycles[name].append(i)
                 for dest in dests:
                     q.append((dest, send, name))
                     pulses[send] += 1
 
-print(pulses)
-print(pulses[0]*pulses[1])
+# print(pulses)
+# print(pulses[0]*pulses[1])
+least_common_multiple_assuming_no_common_factors = 1
+for k,v in cycles.items():
+    print(k,v)
+    least_common_multiple_assuming_no_common_factors *= v[0]
+print(least_common_multiple_assuming_no_common_factors)
