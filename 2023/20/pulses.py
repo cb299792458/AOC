@@ -22,13 +22,13 @@ for name, (_, _, _, dests) in modules.items():
 q = deque()
 pulses = [0,0]
 
-criticals = ['mp','qt','qb','ng']
+criticals = ['mp','qt','qb','ng'] # CTRL+F 
 cycles = {key: [] for key in criticals}
 
-for i in range(1,50000):
+for i in range(1,10000):
     pulses[0] += 1
     q.append(('roadcaster',  0,     'button'))
-    #         name, pulse, origin
+    #         name,          pulse, origin
     while q:
         # print(q)
         (name, pulse, orig) = q.popleft()
@@ -63,3 +63,6 @@ for k,v in cycles.items():
     print(k,v)
     least_common_multiple_assuming_no_common_factors *= v[0]
 print(least_common_multiple_assuming_no_common_factors)
+
+import math
+print(math.lcm(*[v[0] for v in cycles.values()]))
