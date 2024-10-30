@@ -21,7 +21,13 @@ for r, row in enumerate(input):
 def manhattan(a, b):
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
 def make_key(grid):
-    return ''.join(''.join(line) for line in grid)
+    res = []
+    for line in grid:
+        for char in line:
+            res.append(char)
+        while len(res)%13!=0:
+            res.append(E)
+    return ''.join(res)
 def make_grid(key):
     return [list(key[i:i+13]) for i in range(0, 39, 13)]
 
@@ -52,10 +58,16 @@ def has_path(t1,t2,grid):
     return True
 
 seen = dict()
-# burrows = copy.deepcopy(input)
-# grid = make_grid(make_key(burrows))
-finished = "#...........####A#B#C#D###  #A#B#C#D#"
+finished = "#...........####A#B#C#D###  #A#B#C#D#  #A#B#C#D#  #A#B#C#D#"
+finished = "#...........####A#B#C#D###  #A#B#C#D#  "
 
+# key = make_key(input)
+# print(key)
+# grid = make_grid(key)
+# for line in grid:
+#     print(line)
+
+# q = deque([])
 q = deque([(0, make_key(input))])
 while q:
     (cost, key) = q.popleft()
@@ -109,9 +121,16 @@ while q:
             if char==D and c2!=9:
                 continue
 
-            if r2>0 and grid[r2-1][c2] in [A,B,C,D] and grid[r2-1][c2]!=char:
-                continue
-            if r2<2 and grid[r2+1][c2] in [A,B,C,D] and grid[r2+1][c2]!=char:
+            # if r2>0 and grid[r2-1][c2] in [A,B,C,D] and grid[r2-1][c2]!=char:
+            #     continue
+            # if r2<2 and grid[r2+1][c2] in [A,B,C,D] and grid[r2+1][c2]!=char:
+            #     continue
+            occupied = False
+            for r3 in range(1, 3):
+                if grid[r3][c2] in [A,B,C,D] and grid[r3][c2]!=char:
+                    occupied = True
+                    break
+            if occupied:
                 continue
 
             dist = manhattan((r1,c1),(r2,c2))
