@@ -10,6 +10,23 @@ def fewest_tokens(ax, ay, bx, by, xt, yt):
     
     return res if res < math.inf else 0
 
+def inv(matrix):
+    [[a, b], [c, d]] = matrix
+    det = a*d - b*c
+    return [[d/det, -b/det], [-c/det, a/det]]
+
+def mul(m1, m2):
+    [[a, b], [c, d]] = m1
+    [[x],[y]] = m2
+    return [[a*x+b*y], [c*x+d*y]]
+
+def count_tokens(a,b):
+    round_a = round(a)
+    round_b = round(b)
+    if abs(a - round_a) < .001 and abs(b - round_b) < .001:
+        return 3*round_a+round_b
+    return 0
+
 ans = 0
 
 for i in range(0,len(input),4):
@@ -26,6 +43,13 @@ for i in range(0,len(input),4):
     xt = int(xt[2:-1])
     yt = int(yt[2:])
 
-    ans += fewest_tokens(ax, ay, bx, by, xt, yt)
+    # part 2
+    xt += 10000000000000
+    yt += 10000000000000
+
+    [[a], [b]] = mul(inv([[ax, bx], [ay, by]]), [[xt], [yt]])
+    ans += count_tokens(a,b)
 
 print(ans)
+
+
