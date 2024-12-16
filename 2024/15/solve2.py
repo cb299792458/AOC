@@ -1,3 +1,5 @@
+from collections import deque
+
 input = open('input.txt','r').read().strip()
 [layout, instructions] = input.split('\n\n')
 
@@ -56,66 +58,46 @@ def can_move(r, c, d):
         
     raise Exception('unknown character', r, c, d, grid[nr][nc])
 
-def build_push_stack(r, c, d, stack):
-    stack.append((r,c,d))
+def build_push_stack(r1, c1, d):
+    queue = deque([(r1,c1)])
+    seen = set()
+    stack = []
 
-    nr, nc = r + dirs[d][0], c + dirs[d][1]
+    while queue:
+        (r, c) = queue.popleft()
+        if grid[r][c] == '.':
+            continue
+        if (r,c) in seen:
+            continue
+        seen.add((r,c))
+        stack.append((r,c))
 
-    if d in ['<', '>']:
-        if grid[nr][nc] in ['[', ']']:
-            build_push_stack(nr, nc, d, stack)
-        return
-
-    if grid[nr][nc] == '[':
-        if grid[r][c] == '@' or grid[r][c] == ']':
-            build_push_stack(nr, nc+1, d, stack)
-        build_push_stack(nr, nc, d, stack)
-    elif grid[nr][nc] == ']':
-        if grid[r][c] == '@' or grid[r][c] == '[':
-            build_push_stack(nr, nc-1, d, stack)
-        build_push_stack(nr, nc, d, stack)
+        nr, nc = r + dirs[d][0], c + dirs[d][1]
+        queue.append((nr,nc))
+        if grid[nr][nc] == '[':
+            queue.append((nr,nc+1))
+        if grid[nr][nc] == ']':
+            queue.append((nr,nc-1))
     
+    return stack
+
 r,c = -1,-1
 for i in range(M):
     for j in range(N):
         if grid[i][j] == '@':
             r,c = i,j
 
-"""
-This is some jank because I couldn't get the push stack/queue in the right order.
-The boxes need to be pushed from the farthest to the closest, so that a piece of a
-box never swaps with another piece of a box, only empty space.
+for d in instructions:
 
-I should have built the stack with level order traversal/bfs.
-"""
-sort_fns = {
-    U: lambda x: -x[0],
-    D: lambda x: x[0],
-    L: lambda x: -x[1],
-    R: lambda x: x[1]
-}
-
-for i in instructions:
-
-    if can_move(r, c, i):
-        stack = []
-        build_push_stack(r, c, i, stack)
-
-        new_stack = []
-        seen = set()
-        for t in stack:
-            if t not in seen:
-                seen.add(t)
-                new_stack.append(t)
-        stack = new_stack
-        stack.sort(key=sort_fns[i])       
+    if can_move(r, c, d):  
+        stack = build_push_stack(r, c, d)
 
         while stack:
-            (r, c, d) = stack.pop()
+            (r, c) = stack.pop()
             swap(r,c,r+dirs[d][0],c+dirs[d][1])
 
-        r += dirs[i][0]
-        c += dirs[i][1]
+        r += dirs[d][0]
+        c += dirs[d][1]
         
 for line in grid:
     print(''.join(line))
