@@ -3,14 +3,6 @@ GRID_SIZE = 71
 BYTES = 1024
 
 grid = [['.' for _ in range(GRID_SIZE)] for _ in range(GRID_SIZE)]
-# for i in range(BYTES):
-#     [c, r] = input[i].split(',')
-#     c = int(c)
-#     r = int(r)
-#     grid[r][c] = '#'
-
-# for line in grid:
-#     print(''.join(line))
 
 from collections import deque
 
@@ -38,8 +30,15 @@ def find_min_steps():
 
     return -1
 
+# # part 1
+# for i in range(BYTES):
+#     [c, r] = input[i].split(',')
+#     c = int(c)
+#     r = int(r)
+#     grid[r][c] = '#'
 # print(find_min_steps())
 
+# part 2
 for [i, line] in enumerate(input):
     print(i)
     
