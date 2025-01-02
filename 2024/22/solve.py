@@ -10,7 +10,7 @@ def prune(secret):
 
 def process(secret):
     secret = prune(mix(secret * 64, secret))
-    secret = prune(mix(secret//32, secret))
+    secret = prune(mix(secret // 32, secret))
     secret = prune(mix(secret * 2048, secret))
     return secret
 
@@ -47,6 +47,6 @@ for num in nums:
         
         prev = num
 
-everything = list(totals.items())
-everything.sort(key=lambda x: x[1])
-print(everything[-1])
+sequences_and_bananas = list(totals.items())
+sequences_and_bananas.sort(key=lambda x: x[1])
+print(sequences_and_bananas[-1])
