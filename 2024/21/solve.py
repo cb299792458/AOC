@@ -26,52 +26,53 @@ for r in range(2):
 
 def keypad_to_dpad(keypad_input):
     keypad_r, keypad_c = keypad_locations['A']
-    dpad_input = []
+    inputs = ['']
     for c in keypad_input:
+        new_inputs = []
         (next_r, next_c) = keypad_locations[c]
-        while keypad_r < next_r:
-            dpad_input.append('v')
-            keypad_r += 1
-        while keypad_r > next_r:
-            dpad_input.append('^')
-            keypad_r -= 1
-        while keypad_c < next_c:
-            dpad_input.append('>')
-            keypad_c += 1
-        while keypad_c > next_c:
-            dpad_input.append('<')
-            keypad_c -= 1
-        dpad_input += 'A'
-    return ''.join(dpad_input)
+        vert = 'v' * (next_r-keypad_r) if next_r > keypad_r else '^' * (keypad_r-next_r)
+        hori = '>' * (next_c-keypad_c) if next_c > keypad_c else '<' * (keypad_c-next_c)
+        for i in inputs:
+            if keypad_c == 0 and next_r == 3:
+                pass
+            else:
+                new_inputs.append(i + vert + hori + 'A')
+            if keypad_r == 3 and next_c == 0:
+                pass
+            else:
+                new_inputs.append(i + hori + vert + 'A')
+        
+        inputs = set(new_inputs)
+        keypad_r, keypad_c = next_r, next_c
+    return inputs
 
-def dpad_to_dpad(input):
-    (r, c) = dpad_locations['A']
-    res = []
-    for char in input:
-        (nr, nc) = dpad_locations[char]
-        while r < nr:
-            res.append('v')
-            r += 1
-        while r > nr:
-            res.append('^')
-            r -= 1
-        while c < nc:
-            res.append('>')
-            c += 1
-        while c > nc:
-            res.append('<')
-            c -= 1
-        res.append('A')
-    return ''.join(res)
+def dpad_to_dpad(prev_inputs):
+    all_results = []
+    for input in prev_inputs:
+        (r, c) = dpad_locations['A']
+        results = ['']
+        for char in input:
+            new_results = []
+            (next_r, next_c) = dpad_locations[char]
+            vert = 'v' * (next_r-r) if next_r > r else '^' * (r-next_r)
+            hori = '>' * (next_c-c) if next_c > c else '<' * (c-next_c)
+            for result in results:
+                if next_c == 0 and r == 0:
+                    pass
+                else:
+                    new_results.append(result + vert + hori + 'A')
+                if next_r == 0 and c == 0:
+                    pass
+                else:
+                    new_results.append(result + hori + vert + 'A')
+            results = set(new_results)
+            r, c = next_r, next_c
+        all_results.extend(results)
+    return set(all_results)
 
-for line in input[:1]:
-    print(line)
-    code = keypad_to_dpad(line)
-    print(code)
-    for _ in range(3):
-        code = dpad_to_dpad(code)
-    print(code)
-"""
-v<A<A^>>Av<<A^>>AA<Av>AA^Av<<A^>>Av<A>A^AA<A>Av<A<AA^>>A<Av>AA^Av<A^>A<A>Av<A<AA^>>A<Av>AA^AAv<A<A^>>AvA^A<A>Av<<A^>>AvA^Av<A<A^>>Av<<A^>>A<Av>AA^AAAv<<A^>>Av<A>A^A<A>A
-<vA<AA>>^AvAA<^A>A<v<A>>^AvA^A<vA>^A<v<A>^A>AAvA^A<v<A>A>^AAAvA<^A>Av<<A>>^A<A>AvA<^AA>A<vAAA>^A<A^A>^^AvvvA
-"""
+complexities = 0
+for line in input:
+    num = int(line[:-1])
+    inputs = dpad_to_dpad(dpad_to_dpad(keypad_to_dpad(line)))
+    complexities += min(len(i) for i in inputs) * num
+print(complexities)
