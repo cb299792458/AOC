@@ -1,3 +1,4 @@
+import time
 input = [l[:-1] for l in open('input.txt','r').readlines()]
 grid = [[c for c in l] for l in input]
 M, N = len(grid), len(grid[0])
@@ -61,8 +62,10 @@ def add_obstacle(ro,co):
     grid[ro][co] = '.'
     return False
 
+t = time.time()
 for r in range(M):
     for c in range(N):
         if add_obstacle(r,c):
             loops += 1
 print(loops)
+print(time.time()-t)
