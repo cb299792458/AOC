@@ -10,7 +10,6 @@ diffs = Counter()
 for num in input:
     diffs[num - prev] += 1
     prev = num
-
 print(diffs[1] * diffs[3])
 
 ways = Counter()
