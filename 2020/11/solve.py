@@ -26,20 +26,37 @@ def count_neighbors(r, c):
         neighbors += is_occupied(nr, nc)
     return neighbors
 
-moves = 0
+def count_visible(r, c):
+    visible = 0
+    
+    for [dr, dc] in dirs:
+        [nr, nc] = [r + dr, c + dc]
+        while (
+            nr > -1 and
+            nr < M and
+            nc > -1 and
+            nc < N and
+            grid[nr][nc] == '.'
+        ):
+            nr += dr
+            nc += dc
+        
+        visible += is_occupied(nr, nc)
+    
+    return visible
+
 while True:
-    moves += 1
     new_grid = [['.' for _ in range(N)] for _ in range(M)]
 
     for r in range(M):
         for c in range(N):
             if grid[r][c] == 'L':
-                if count_neighbors(r, c) == 0:
+                if count_visible(r, c) == 0:
                     new_grid[r][c] = '#'
                 else:
                     new_grid[r][c] = 'L'
             elif grid[r][c] == '#':
-                if count_neighbors(r, c) >= 4:
+                if count_visible(r, c) >= 5:
                     new_grid[r][c] = 'L'
                 else:
                     new_grid[r][c] = '#'
