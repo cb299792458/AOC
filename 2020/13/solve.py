@@ -18,3 +18,19 @@ for id in ids:
         res = id * wait
 
 print(res)
+
+indices = dict()
+for [i, s] in enumerate(ids):
+    if s != 'x':
+        indices[int(s)] = i
+
+time = 0
+step = 1
+
+for (bus_id, index) in indices.items():
+    while (time + index) % bus_id:
+        time += step
+    
+    step *= bus_id
+
+print(time)
