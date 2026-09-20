@@ -8,7 +8,7 @@ def evaluate(string): # 1 + (2 * 3) + (4 * (5 + 6))
         if char == ')':
             substring = ''
             while stack[-1] != '(':
-                substring = str(stack.pop()) + substring
+                substring = stack.pop() + substring
 
             stack.pop()
             stack.append(str(evaluate(substring)))
