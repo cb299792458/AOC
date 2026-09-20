@@ -1,17 +1,19 @@
+from collections import deque
 input = [l[:-1] for l in open('input.txt','r').readlines()]
 # 1 + (2 * 3) + (4 * (5 + 6))
 
 def evaluate(string): # 1 + (2 * 3) + (4 * (5 + 6))
+
     # handle parentheses
     stack = []
     for char in string:
         if char == ')':
-            substring = ''
+            substring = deque()
             while stack[-1] != '(':
-                substring = stack.pop() + substring
+                substring.appendleft(stack.pop())
 
             stack.pop()
-            stack.append(str(evaluate(substring)))
+            stack.append(str(evaluate(''.join(substring))))
 
         else:
             stack.append(char)
@@ -21,15 +23,12 @@ def evaluate(string): # 1 + (2 * 3) + (4 * (5 + 6))
     stack = ''.join(stack).split(' ')
 
     # handle math
-    res = int(stack[0])
+    res = 0
 
-    operation = ''
-    for char in stack[1:]:
-        if char == ' ':
-            continue
+    operation = '+'
+    for char in stack:
         if char in '+-*':
             operation = char
-
         else:
             match operation:
                 case '+':
